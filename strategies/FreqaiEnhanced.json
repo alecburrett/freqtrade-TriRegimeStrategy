@@ -1,0 +1,31 @@
+{
+  "strategy_name": "FreqaiEnhanced",
+  "params": {
+    "max_open_trades": {
+      "max_open_trades": 3
+    },
+    "buy": {
+      "buy_target_threshold": 0.006
+    },
+    "sell": {
+      "sell_target_threshold": -0.009
+    },
+    "roi": {
+      "0": 0.213,
+      "26": 0.028,
+      "77": 0.011,
+      "137": 0
+    },
+    "stoploss": {
+      "stoploss": -0.086
+    },
+    "trailing": {
+      "trailing_stop": true,
+      "trailing_stop_positive": 0.143,
+      "trailing_stop_positive_offset": 0.179,
+      "trailing_only_offset_is_reached": false
+    }
+  },
+  "ft_stratparam_v": 1,
+  "export_time": "2026-05-11 11:21:41.809154+00:00"
+}
