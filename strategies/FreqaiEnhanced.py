@@ -4,28 +4,35 @@ from functools import reduce
 from freqtrade.strategy import IStrategy, DecimalParameter
 
 class FreqaiEnhanced(IStrategy):
-    minimal_roi = {"0": 0.05, "60": 0.02, "120": -1}
-    stoploss = -0.05
+    minimal_roi = {"0": 0.05, "60": 0.02, "120": 0.01}
+    stoploss = -0.025
+    trailing_stop = True
+    trailing_stop_positive = 0.01
+    trailing_stop_positive_offset = 0.02
     timeframe = '5m'
     can_short = False
 
     # AI trigger thresholds for hyperopt to test
-    buy_target_threshold = DecimalParameter(0.001, 0.010, default=0.004, space='buy', optimize=True)
+    buy_target_threshold = DecimalParameter(0.001, 0.010, default=0.008, space='buy', optimize=True)
     sell_target_threshold = DecimalParameter(-0.010, -0.001, default=-0.002, space='sell', optimize=True)
 
     def feature_engineering_expand_all(self, dataframe: pd.DataFrame, period: int, metadata: dict, **kwargs) -> pd.DataFrame:
         dataframe[f"%-rsi-period"] = ta.RSI(dataframe, timeperiod=period)
         dataframe[f"%-roc-period"] = ta.ROC(dataframe, timeperiod=period)
-        dataframe[f"%-ema-period"] = ta.EMA(dataframe, timeperiod=period)
-        dataframe[f"%-ema_dist-period"] = (dataframe['close'] - dataframe[f"%-ema-period"]) / dataframe[f"%-ema-period"]
-        dataframe[f"%-atr-period"] = ta.ATR(dataframe, timeperiod=period)
-        dataframe[f"%-atr_norm-period"] = dataframe[f"%-atr-period"] / dataframe['close']
+        
+        # Calculate EMA and ATR for derived metrics without adding them as direct features
+        ema = ta.EMA(dataframe, timeperiod=period)
+        dataframe[f"%-ema_dist-period"] = (dataframe['close'] - ema) / ema
+        
+        atr = ta.ATR(dataframe, timeperiod=period)
+        dataframe[f"%-atr_norm-period"] = atr / dataframe['close']
+        
         dataframe[f"%-mfi-period"] = ta.MFI(dataframe, timeperiod=period)
         return dataframe
 
     def feature_engineering_expand_basic(self, dataframe: pd.DataFrame, metadata: dict, **kwargs) -> pd.DataFrame:
         dataframe["%-pct-change"] = dataframe["close"].pct_change()
-        dataframe["%-raw_volume"] = dataframe["volume"]
+        dataframe["%-volume_mean_ratio"] = dataframe["volume"] / ta.SMA(dataframe["volume"], timeperiod=20)
         return dataframe
 
     def feature_engineering_standard(self, dataframe: pd.DataFrame, metadata: dict, **kwargs) -> pd.DataFrame:
