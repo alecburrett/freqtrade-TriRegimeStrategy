@@ -1,0 +1,6 @@
+data/
+models/
+backtest_results/
+*.sqlite
+logs/
+__pycache__/
