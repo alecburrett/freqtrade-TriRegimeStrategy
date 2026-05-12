@@ -6,7 +6,7 @@ class TriRegimeStrategy(IStrategy):
     timeframe = '4h'
     # 200 candles on 4h = 33 days of history. Plenty for our indicators.
     startup_candle_count = 200 
-    can_short = True
+    can_short = False
     
     # Hyperopt parameters for RSI thresholds
     buy_rsi = IntParameter(15, 45, default=30, space='buy', optimize=True)
