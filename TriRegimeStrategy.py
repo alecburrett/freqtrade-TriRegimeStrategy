@@ -32,26 +32,32 @@ class TriRegimeStrategy(IStrategy):
         informative = self.dp.get_pair_dataframe(
             pair=metadata['pair'], timeframe=self.informative_timeframe
         )
-        informative['ema_macro'] = ta.EMA(informative, timeperiod=50)
-        informative['adx_macro'] = ta.ADX(informative, timeperiod=14)
-        informative['regime_bull'] = (
-            (informative['close'] > informative['ema_macro'])
-            & (informative['adx_macro'] > 20)
-        )
-        informative['regime_bear'] = (
-            (informative['close'] < informative['ema_macro'])
-            & (informative['adx_macro'] > 20)
-        )
-        informative['regime_crab'] = informative['adx_macro'] <= 20
 
-        dataframe = merge_informative_pair(
-            dataframe, informative, self.timeframe, self.informative_timeframe, ffill=True
-        )
+        if informative.empty:
+            dataframe['regime_bull'] = False
+            dataframe['regime_bear'] = False
+            dataframe['regime_crab'] = False
+        else:
+            informative['ema_macro'] = ta.EMA(informative, timeperiod=50)
+            informative['adx_macro'] = ta.ADX(informative, timeperiod=14)
+            informative['regime_bull'] = (
+                (informative['close'] > informative['ema_macro'])
+                & (informative['adx_macro'] > 20)
+            )
+            informative['regime_bear'] = (
+                (informative['close'] < informative['ema_macro'])
+                & (informative['adx_macro'] > 20)
+            )
+            informative['regime_crab'] = informative['adx_macro'] <= 20
 
-        suffix = f'_{self.informative_timeframe}'
-        dataframe['regime_bull'] = dataframe[f'regime_bull{suffix}'].fillna(False).astype(bool)
-        dataframe['regime_bear'] = dataframe[f'regime_bear{suffix}'].fillna(False).astype(bool)
-        dataframe['regime_crab'] = dataframe[f'regime_crab{suffix}'].fillna(False).astype(bool)
+            dataframe = merge_informative_pair(
+                dataframe, informative, self.timeframe, self.informative_timeframe, ffill=True
+            )
+
+            suffix = f'_{self.informative_timeframe}'
+            dataframe['regime_bull'] = dataframe[f'regime_bull{suffix}'].fillna(False).astype(bool)
+            dataframe['regime_bear'] = dataframe[f'regime_bear{suffix}'].fillna(False).astype(bool)
+            dataframe['regime_crab'] = dataframe[f'regime_crab{suffix}'].fillna(False).astype(bool)
 
         dataframe['rsi'] = ta.RSI(dataframe, timeperiod=14)
         bollinger = ta.BBANDS(dataframe, timeperiod=20, nbdevup=2.0, nbdevdn=2.0)
@@ -102,7 +108,7 @@ class TriRegimeStrategy(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         if dataframe is None or dataframe.empty:
             return None
-        last = dataframe.iloc[-1].squeeze()
+        last = dataframe.iloc[-1]
 
         tag = trade.enter_tag or ''
 
