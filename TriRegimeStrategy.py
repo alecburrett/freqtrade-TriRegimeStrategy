@@ -117,7 +117,7 @@ class TriRegimeStrategy(IStrategy):
             return 'bull_rsi_exit'
         if tag == 'bear_oversold' and last['rsi'] > self.bear_exit_rsi.value:
             return 'bear_bounce_exit'
-        if tag == 'crab_lower' and last['close'] >= last['bb_middleband']:
+        if tag == 'crab_lower' and current_rate >= last['bb_middleband']:
             return 'crab_middle_exit'
 
         return None
