@@ -1,0 +1,116 @@
+{
+    "$schema": "https://schema.freqtrade.io/schema.json",
+    "max_open_trades": 3,
+    "stake_currency": "USDT",
+    "stake_amount": "unlimited",
+    "tradable_balance_ratio": 0.99,
+    "fiat_display_currency": "USD",
+    "dry_run": true,
+    "dry_run_wallet": 1000,
+    "cancel_open_orders_on_exit": false,
+    "trading_mode": "spot",
+    "margin_mode": "",
+    "unfilledtimeout": {
+        "entry": 10,
+        "exit": 10,
+        "exit_timeout_count": 0,
+        "unit": "minutes"
+    },
+    "entry_pricing": {
+        "price_side": "same",
+        "use_order_book": true,
+        "order_book_top": 1,
+        "price_last_balance": 0.0,
+        "check_depth_of_market": {
+            "enabled": false,
+            "bids_to_ask_delta": 1
+        }
+    },
+    "exit_pricing": {
+        "price_side": "same",
+        "use_order_book": true,
+        "order_book_top": 1
+    },
+    "exchange": {
+        "name": "binance",
+        "key": "",
+        "secret": "",
+        "ccxt_config": {},
+        "ccxt_async_config": {},
+        "pair_whitelist": [
+            "PEPE/USDT",
+            "AVAX/USDT",
+            "UNI/USDT",
+            "DOGE/USDT",
+            "TAO/USDT",
+            "OP/USDT",
+            "TON/USDT",
+            "SUI/USDT",
+            "BTC/USDT",
+            "ETH/USDT"
+        ],
+        "pair_blacklist": [
+            "BNB/.*"
+        ]
+    },
+    "pairlists": [
+        {
+            "method": "StaticPairList"
+        }
+    ],
+    "telegram": {
+        "enabled": false,
+        "token": "",
+        "chat_id": ""
+    },
+    "api_server": {
+        "enabled": true,
+        "listen_ip_address": "0.0.0.0",
+        "listen_port": 8085,
+        "verbosity": "error",
+        "enable_openapi": false,
+        "jwt_secret_key": "a01182842df6322b125b8b13e0fda37a3042203d8f6b72ee1c0a273a49661ec5",
+        "ws_token": "y2Oof1Ir5AOn0DzUMSNyWx57_hltXTJOXA",
+        "CORS_origins": [],
+        "username": "freqtrader",
+        "password": "freqtrader"
+    },
+    "bot_name": "Freqtrade-TriRegime-AI",
+    "initial_state": "running",
+    "force_entry_enable": false,
+    "internals": {
+        "process_throttle_secs": 5
+    },
+    "timeframe": "5m",
+    "freqai": {
+        "enabled": true,
+        "purge_old_models": 2,
+        "train_period_days": 15,
+        "backtest_period_days": 7,
+        "live_retrain_hours": 0,
+        "expiration_hours": 0.5,
+        "identifier": "triregime_ai_model",
+        "feature_parameters": {
+            "include_time_in_features": true,
+            "include_corr_in_features": false,
+            "include_shifted_candles": 2,
+            "include_macro_indicators": true,
+            "indicator_periods_candles": [
+                10,
+                20
+            ],
+            "label_period_candles": 5,
+            "include_corr_pairlist": [
+                "BTC/USDT",
+                "ETH/USDT"
+            ]
+        },
+        "data_split_parameters": {
+            "test_size": 0.25,
+            "random_state": 42
+        },
+        "model_training_parameters": {
+            "n_estimators": 100
+        }
+    }
+}

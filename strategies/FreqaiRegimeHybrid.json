@@ -1,0 +1,31 @@
+{
+  "strategy_name": "FreqaiRegimeHybrid",
+  "params": {
+    "max_open_trades": {
+      "max_open_trades": 3
+    },
+    "buy": {
+      "buy_target_threshold": 0.02
+    },
+    "sell": {
+      "sell_target_threshold": -0.019
+    },
+    "roi": {
+      "0": 0.159,
+      "33": 0.037,
+      "84": 0.027,
+      "119": 0
+    },
+    "stoploss": {
+      "stoploss": -0.324
+    },
+    "trailing": {
+      "trailing_stop": true,
+      "trailing_stop_positive": 0.234,
+      "trailing_stop_positive_offset": 0.272,
+      "trailing_only_offset_is_reached": false
+    }
+  },
+  "ft_stratparam_v": 1,
+  "export_time": "2026-05-11 20:54:12.112596+00:00"
+}
