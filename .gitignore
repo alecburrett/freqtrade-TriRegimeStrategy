@@ -4,3 +4,11 @@ backtest_results/
 *.sqlite
 logs/
 __pycache__/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+logs/
+data/
+models/
+backtest_results/
+hyperopt_results/
