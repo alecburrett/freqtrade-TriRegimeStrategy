@@ -1,0 +1,33 @@
+{
+  "strategy_name": "TriRegimeStrategy",
+  "params": {
+    "roi": {
+      "0": 0.481,
+      "1277": 0.248,
+      "3973": 0.121,
+      "7117": 0
+    },
+    "stoploss": {
+      "stoploss": -0.034
+    },
+    "trailing": {
+      "trailing_stop": true,
+      "trailing_stop_positive": 0.163,
+      "trailing_stop_positive_offset": 0.241,
+      "trailing_only_offset_is_reached": true
+    },
+    "max_open_trades": {
+      "max_open_trades": 3
+    },
+    "buy": {
+      "bear_buy_rsi": 15,
+      "buy_rsi": 44
+    },
+    "sell": {
+      "bear_exit_rsi": 64,
+      "exit_rsi": 85
+    }
+  },
+  "ft_stratparam_v": 1,
+  "export_time": "2026-05-13 07:44:08.538019+00:00"
+}
