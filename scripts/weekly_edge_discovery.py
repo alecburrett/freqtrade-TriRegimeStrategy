@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os, json, subprocess, datetime, glob
 
-FREQTRADE_DIR = "/home/alec/freqtrade"
+FREQTRADE_DIR = os.getenv('FREQTRADE_DIR', '/home/alec/freqtrade')
 os.chdir(FREQTRADE_DIR)
 
 broad_coins = [
@@ -27,10 +27,13 @@ except Exception as e:
     exit(1)
 
 # 2. Download Data
-subprocess.run([
+result = subprocess.run([
     "docker", "compose", "run", "--rm", "freqtrade-triregime", "download-data", 
     "--config", "user_data/edge_backtest_config.json", "--days", "30", "-t", "15m", "1h"
 ], capture_output=True)
+if result.returncode != 0:
+    print(f"❌ Failed to download data: {result.stderr.decode()}")
+    exit(1)
 
 # 3. Run Backtest
 start_date = (datetime.datetime.now() - datetime.timedelta(days=30)).strftime("%Y%m%d")
@@ -84,7 +87,7 @@ for config_file in ["user_data/config_triregime_ai.json", "user_data/config_trir
         with open(config_file, "w") as f:
             json.dump(cfg, f, indent=4)
     except Exception as e:
-        pass
+        print(f"❌ Failed to update config: {e}")
 
 # 6. Restart Bots
 subprocess.run(["docker", "restart", "freqtrade-triregime", "freqtrade-triregime-ai"], capture_output=True)

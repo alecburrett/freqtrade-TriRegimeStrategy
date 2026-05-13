@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 import sqlite3
 import glob
+import os
 
 print("🤖 **Freqtrade Daily Dry-Run Update** 🤖\n")
 
-dbs = glob.glob('/home/alec/freqtrade/user_data/trades_*.sqlite')
+dbs = glob.glob(os.path.join(os.getenv('FREQTRADE_DIR', '/home/alec/freqtrade'), 'user_data/trades_*.sqlite'))
 for db in sorted(dbs):
     bot = db.split('trades_')[1].split('.sqlite')[0]
     if bot.lower() in ['sample', 'v3']:
